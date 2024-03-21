@@ -15,7 +15,37 @@ class ViewController: UIViewController {
     
     
     override func viewDidAppear(_ animated: Bool) {
-        serialDispatchQueue()
+        concurrentDispatchQueue()
+        //serialDispatchQueue()
+    }
+    
+    func concurrentDispatchQueue(){
+        let concurrentDispatchQueue = DispatchQueue(label: "Queue1",attributes: .concurrent)
+        concurrentDispatchQueue.sync {
+            print("Pallavi Mam attending enquiry \(Thread.current.threadPriority) -- \(Thread.current.isMainThread) -- \(Thread.current.description)")
+            print("Palllavi mam is taking printouts \(Thread.current.threadPriority) -- \(Thread.current.isMainThread) -- \(Thread.current.description)")
+            for i in 1...10000{
+                print("i is \(i) -- \(Thread.current.threadPriority) -- \(Thread.current.isMainThread) -- \(Thread.current.description)")
+            }
+        }
+        
+        let concurrentQueue2 = DispatchQueue(label: "Queue2",attributes: .concurrent)
+        concurrentQueue2.sync {
+            print("iOS Batch on going  -- \(Thread.current.threadPriority) -- \(Thread.current.isMainThread) -- \(Thread.current.description)")
+            
+        }
+        
+        concurrentQueue2.async {
+            print("iOS Batch working on projects  -- \(Thread.current.threadPriority) -- \(Thread.current.isMainThread) -- \(Thread.current.description)")
+        }
+        
+        concurrentQueue2.async {
+            print("iOS Batch having lunch  -- \(Thread.current.threadPriority) -- \(Thread.current.isMainThread) -- \(Thread.current.description)")
+        }
+        
+        DispatchQueue.main.async {
+            print("Pallavi mam talking to iOS Batch -- \(Thread.current.threadPriority) -- \(Thread.current.isMainThread) -- \(Thread.current.description)")
+        }
     }
     
     func serialDispatchQueue(){
